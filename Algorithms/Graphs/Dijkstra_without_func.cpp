@@ -63,7 +63,6 @@ void solve(int N, int M, vector<Edge>& edges, vector<int>& result)
     for (size_t vertex = 1; vertex < distances.size(); ++vertex) {
         result.push_back(distances[vertex]);
     }
-
 }
 
 int main()
