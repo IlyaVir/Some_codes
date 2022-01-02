@@ -11,7 +11,6 @@ inline void fast() {
     cout.tie(nullptr);
 }
 
-// Вместо таскания кучи данных в отдельных переменных, создадим структуру, в которой будут нужные нам данные
 // Видео про хеши: https://youtu.be/-6kVnVxrCv0
 struct Hashed_string {
     long long add(long long left, long long right) const {
