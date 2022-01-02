@@ -1,12 +1,10 @@
-#include <iostream>
 #include <vector>
-#include <algorithm>
-#include <cstdio>
 #include <set>
+#include <climits>
 
 using namespace std;
 
-const int kINF = 1e9;
+const int kINF = INT_MAX;
 
 struct Vertex {
     explicit Vertex(int to = 0, int cost = 0) : to_(to), cost_(cost) {}
