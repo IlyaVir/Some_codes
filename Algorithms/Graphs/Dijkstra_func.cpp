@@ -2,8 +2,6 @@
 #include <set>
 #include <climits>
 
-using namespace std;
-
 const int kINF = INT_MAX;
 
 struct Vertex {
@@ -19,7 +17,9 @@ struct Vertex {
     }
 };
 
-vector <int> dijkstra(const vector <vector <Vertex>> &list_vertexes, int start = 0) {
+std::vector <int> dijkstra(const std::vector <std::vector <Vertex>> &list_vertexes, int start = 0) {
+    using namespace std;
+
     vector <int> distances(list_vertexes.size(), kINF);
     distances[start] = 0;
     set <pair <int, int>> next_vertexes;
