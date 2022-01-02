@@ -177,7 +177,6 @@ private:
     Node <type> *front_end_, *back_end_;
     // Это барьерные элементы, т.е. сразу после front_end'а и перед back_end'ом идут добавленные в список элементы
     // (front_end_; back_end_): front_end_ <-> elem_1 <-> elem_2 <-> elem_3 <-> ... <-> back_end_
-    // Благодаря тому, что есть барьерные элементы, писать код одно удовольствие
 };
 
 int main() {
