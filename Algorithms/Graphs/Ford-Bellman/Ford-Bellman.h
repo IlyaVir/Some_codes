@@ -1,90 +1,66 @@
 #pragma once
 
 #include <vector>
-#include <climits>
+#include <limits>
+#include <list>
 
 struct Edge {
-    explicit Edge(int from = 0, int to = 0, int cost = 0) : from_(from), to_(to), cost_(cost) {}
-    int from_, to_, cost_;
-
-    int from() const {
-        return from_;
-    }
-    
-    int to() const {
-        return to_;
-    }
-
-    int cost() const {
-        return cost_;
-    }
+    explicit Edge(size_t from_ = 0, size_t to_ = 0, int cost_ = 0) : from(from_), to(to_), cost(cost_) {}
+    size_t from, to;
+    int cost;
 };
 
-// Бесконечность
-const int kINF = INT_MAX;
+std::vector <std::list <size_t>> edges_to_adjacency_list(size_t size, const std::vector <Edge> &edges) {
+    std::vector <std::list <size_t>> adjacency_list(size);
 
-std::vector <std::vector <int>> edges_to_list(size_t size, const std::vector <Edge> &edges) {
-    std::vector <std::vector <int>> vertex_list(size);
-    for (const Edge &edge : edges) {
-        vertex_list[edge.from()].push_back(edge.to());
+    for (const auto [from, to, cost] : edges) {
+        adjacency_list[from].push_back(to);
     }
-    return vertex_list;
+
+    return adjacency_list;
 }
 
-void mark_minus_infinity(const std::vector <std::vector <int>> &vertex_list, int from,
-                         std::vector <bool> &minus_infinity) {
-    for (int to : vertex_list[from]) {
-        if (!minus_infinity[to]) {
-            minus_infinity[to] = true;
-            mark_minus_infinity(vertex_list, to, minus_infinity);
-        }
-    }
-}
+const int kINF = std::numeric_limits<int>::max();
 
-void mark_smallest(const std::vector <Edge> &edges, std::vector <int> &distances) {
-    std::vector <bool> minus_infinity(distances.size(), false);
-
-    // Вершины, которые обновятся, являются частью отрицательного цикла
-    for (const Edge &edge : edges) {
-        if (distances[edge.from()] != kINF && distances[edge.from()] + edge.cost() < distances[edge.to()]) {
-            minus_infinity[edge.from()] = minus_infinity[edge.to()] = true;
-            distances[edge.from()] = distances[edge.from()] + edge.cost();
-        }
-    }
-
-    std::vector <std::vector <int>> list = edges_to_list(distances.size(), edges);
-    for (int from = 0; from < minus_infinity.size(); ++from) {
-        if (minus_infinity[from]) {
-            mark_minus_infinity(list, from, minus_infinity);
-        }
-    }
-
-    for (int i = 0; i < minus_infinity.size(); ++i) {
-        if (minus_infinity[i]) {
-            distances[i] = -kINF;
+void dfs_mark_minus_infinity(const std::vector <std::list <size_t>> &adjacency_list, size_t from,
+                         std::vector <int> &distances) {
+    distances[from] = -kINF;
+    for (auto to : adjacency_list[from]) {
+        if (distances[to] != -kINF) {
+            dfs_mark_minus_infinity(adjacency_list, to, distances);
         }
     }
 }
 
-std::vector <int> ford_bellman(int size, const std::vector <Edge> &edges, int start = 0) {
+void mark_minus_infinity(const std::vector <Edge> &edges, std::vector <int> &distances) {
+    auto adjacency_list = edges_to_adjacency_list(distances.size(), edges);
+    for (const auto [from, to, cost] : edges) {
+        if ((distances[from] == -kINF) ||
+            (distances[from] != kINF && distances[from] + cost < distances[to])) {
+            dfs_mark_minus_infinity(adjacency_list, from, distances);
+        }
+    }
+}
+
+std::vector <int> ford_bellman(size_t size, const std::vector <Edge> &edges, size_t start = 0) {
     std::vector <int> distances(size, kINF);
     distances[start] = 0;
 
-    bool changed = true;
-    int iters = 0;
-    while(changed && iters <= size) {
-        changed = false;
-        for (const Edge &edge : edges) {
-            if (distances[edge.from()] != kINF && distances[edge.from()] + edge.cost() < distances[edge.to()]) {
-                distances[edge.to()] = distances[edge.from()] + edge.cost();
-                changed = true;
+    {
+        bool changed = true;
+        for (size_t iters = 0; iters < size && changed; ++iters) {
+            changed = false;
+            for (const auto [from, to, cost] : edges) {
+                if (distances[from] != kINF && distances[from] + cost < distances[to]) {
+                    distances[to] = distances[from] + cost;
+                    changed = true;
+                }
             }
         }
-        ++iters;
     }
 
     // Учёт отрицательных циклов
-    mark_smallest(edges, distances);
+    mark_minus_infinity(edges, distances);
 
     return distances;
 }
