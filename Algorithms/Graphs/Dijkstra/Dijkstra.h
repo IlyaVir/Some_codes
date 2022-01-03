@@ -2,33 +2,33 @@
 
 #include <vector>
 #include <set>
-#include <climits>
+#include <limits>
 
-const int kINF = INT_MAX;
+const size_t kINF = std::numeric_limits<size_t>::max();
 
 struct Vertex {
-    explicit Vertex(int to = 0, int cost = 0) : to_(to), cost_(cost) {}
-    int to_, cost_;
+    explicit Vertex(size_t to = 0, size_t cost = 0) : to_(to), cost_(cost) {}
+    size_t to_, cost_;
 
-    int to() const {
+    size_t to() const {
         return to_;
     }
 
-    int cost() const {
+    size_t cost() const {
         return cost_;
     }
 };
 
-std::vector <int> dijkstra(const std::vector <std::vector <Vertex>> &list_vertexes, int start = 0) {
+std::vector <size_t> dijkstra(const std::vector <std::vector <Vertex>> &list_vertexes, size_t start = 0) {
     using namespace std;
 
-    vector <int> distances(list_vertexes.size(), kINF);
+    vector <size_t> distances(list_vertexes.size(), kINF);
     distances[start] = 0;
-    set <pair <int, int>> next_vertexes;
+    set <pair <size_t, size_t>> next_vertexes;
     next_vertexes.insert({distances[start], start});
 
     while (!next_vertexes.empty()) {
-        int from = next_vertexes.begin() -> second;
+        size_t from = next_vertexes.begin() -> second;
         next_vertexes.erase(next_vertexes.begin());
 
         for (const Vertex &to_vertex : list_vertexes[from]) {
