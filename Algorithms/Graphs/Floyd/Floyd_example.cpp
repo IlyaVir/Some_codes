@@ -20,7 +20,7 @@ inline void fast() {
     std::ios_base::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
-};
+}
 
 template <class iterator>
 void print(const iterator &begin_iterator, const iterator &end_iterator,
