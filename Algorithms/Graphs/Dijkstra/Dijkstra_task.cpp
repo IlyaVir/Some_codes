@@ -21,6 +21,7 @@ struct Vertex {
 };
 
 std::vector <size_t> dijkstra(const std::vector <std::vector <Vertex>> &list_vertexes, size_t start = 0) {
+    // list_vertexes[from] = {to, cost}
     using namespace std;
 
     vector <size_t> distances(list_vertexes.size(), kINF);
@@ -75,7 +76,7 @@ int main() {
         size_t n, m;
         std::cin >> n >> m;
 
-        std::vector <std::vector <Vertex>> list_vertexes(n); // list_vertexes[from] = {to, cost}
+        std::vector <std::vector <Vertex>> list_vertexes(n);
         for (size_t i = 0; i < m; ++i) {
             size_t from, to, cost;
             std::cin >> from >> to >> cost;
