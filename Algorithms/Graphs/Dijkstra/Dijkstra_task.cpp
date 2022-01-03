@@ -4,27 +4,20 @@
 #include <set>
 #include <string>
 #include <iostream>
+#include <list>
 
 const size_t kINF = 2009000999;
 
 struct Vertex {
-    explicit Vertex(size_t to = 0, size_t cost = 0) : to_(to), cost_(cost) {}
-    size_t to_, cost_;
-
-    size_t to() const {
-        return to_;
-    }
-
-    size_t cost() const {
-        return cost_;
-    }
+    explicit Vertex(size_t to_ = 0, size_t cost_ = 0) : to(to_), cost(cost_) {}
+    size_t to, cost;
 };
 
-std::vector <size_t> dijkstra(const std::vector <std::vector <Vertex>> &list_vertexes, size_t start = 0) {
-    // list_vertexes[from] = {to, cost}
+std::vector <size_t> dijkstra(const std::vector <std::list <Vertex>> &adjacency_list, size_t start = 0) {
+    // adjacency_list[from] = {to, cost}
     using namespace std;
 
-    vector <size_t> distances(list_vertexes.size(), kINF);
+    vector <size_t> distances(adjacency_list.size(), kINF);
     distances[start] = 0;
     set <pair <size_t, size_t>> next_vertexes;
     next_vertexes.insert({distances[start], start});
@@ -33,11 +26,11 @@ std::vector <size_t> dijkstra(const std::vector <std::vector <Vertex>> &list_ver
         size_t from = next_vertexes.begin() -> second;
         next_vertexes.erase(next_vertexes.begin());
 
-        for (const Vertex &to_vertex : list_vertexes[from]) {
-            if (distances[to_vertex.to()] > distances[from] + to_vertex.cost()) {
-                next_vertexes.erase({distances[to_vertex.to()], to_vertex.to()});
-                distances[to_vertex.to()] = distances[from] + to_vertex.cost();
-                next_vertexes.insert({distances[to_vertex.to()], to_vertex.to()});
+        for (const auto [to, cost] : adjacency_list[from]) {
+            if (distances[to] > distances[from] + cost) {
+                next_vertexes.erase({distances[to], to});
+                distances[to] = distances[from] + cost;
+                next_vertexes.insert({distances[to], to});
             }
         }
     }
@@ -76,17 +69,17 @@ int main() {
         size_t n, m;
         std::cin >> n >> m;
 
-        std::vector <std::vector <Vertex>> list_vertexes(n);
+        std::vector <std::list <Vertex>> adjacency_list(n);
         for (size_t i = 0; i < m; ++i) {
             size_t from, to, cost;
             std::cin >> from >> to >> cost;
-            list_vertexes[from].emplace_back(to, cost);
-            list_vertexes[to].emplace_back(from, cost);
+            adjacency_list[from].emplace_back(to, cost);
+            adjacency_list[to].emplace_back(from, cost);
         }
 
         size_t start;
         std::cin >> start;
-        print(dijkstra(list_vertexes, start));
+        print(dijkstra(adjacency_list, start));
     }
 
     return 0;
