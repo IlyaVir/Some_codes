@@ -76,7 +76,6 @@ void mark_smallest(const std::vector <Edge> &edges, std::vector <int> &distances
     }
 
     std::vector <std::vector <int>> list = edges_to_list_without_cost(distances.size(), edges);
-    // Пометим вершины, достижимые из отрицательного цикла
     for (int from = 0; from < minus_infinity.size(); ++from) {
         if (minus_infinity[from]) {
             mark_minus_infinity(list, from, minus_infinity);
@@ -96,7 +95,6 @@ std::pair <std::vector <Edge>, std::vector <int>> convert_edges_for_dijkstra(int
 
     bool changed;
     int iters = 0;
-    // iters - кол-во итераций
     do {
         changed = false;
         for (const Edge &edge : edges) {
