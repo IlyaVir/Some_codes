@@ -1,3 +1,5 @@
+#pragma once
+
 #include <vector>
 
 std::vector <std::vector <int>> floyd(std::vector <std::vector <int>> matrix) {
