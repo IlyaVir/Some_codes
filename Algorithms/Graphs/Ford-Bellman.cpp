@@ -51,7 +51,6 @@ void mark_smallest(const std::vector <Edge> &edges, std::vector <int> &distances
     }
 
     std::vector <std::vector <int>> list = edges_to_list(distances.size(), edges);
-    // Пометим вершины, достижимые из отрицательного цикла
     for (int from = 0; from < minus_infinity.size(); ++from) {
         if (minus_infinity[from]) {
             mark_minus_infinity(list, from, minus_infinity);
