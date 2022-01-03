@@ -1,8 +1,8 @@
+// task - https://informatics.msk.ru/mod/statements/view.php?chapterid=171#1
+
 #include <vector>
 #include <iostream>
 #include <string>
-
-// checker - https://informatics.msk.ru/mod/statements/view.php?chapterid=171#1
 
 std::vector <std::vector <int>> floyd(std::vector <std::vector <int>> matrix) {
     for (size_t middle = 0; middle < matrix.size(); ++middle) {
